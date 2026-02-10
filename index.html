@@ -1,231 +1,289 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BRAINY WALLET (BW)</title>
-  <meta name="description" content="BRAINY WALLET - Portefeuille communautaire - Brainy Agency">
-  <style>
-    :root{
-      --blue:#2563EB; --muted:#6b7280; --card:#ffffff; --bg:#f3f4f6; --radius:12px;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-    }
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:#0f172a;line-height:1.4}
-    .container{max-width:960px;margin:36px auto;padding:18px}
-    .card{background:var(--card);border-radius:var(--radius);box-shadow:0 6px 18px rgba(2,6,23,0.06);padding:18px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .logo{width:56px;height:56px;border-radius:10px;background:var(--blue);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
-    nav a{margin-left:12px;color:var(--muted);text-decoration:none;font-weight:600}
-    nav a.button{background:var(--blue);color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none}
-    h1{margin:6px 0 0 0} p.lead{color:var(--muted);margin:8px 0 16px}
-    .grid{display:grid;gap:14px} .cols-2{grid-template-columns:1fr 320px}
-    label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
-    input[type="text"],input[type="email"],input[type="password"],input[type="number"],textarea{
-      width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;background:#fff;
-    }
-    button{background:var(--blue);color:#fff;border:0;padding:10px 12px;border-radius:8px;cursor:pointer}
-    button.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue)}
-    .muted{color:var(--muted);font-size:13px} .small{font-size:13px;color:var(--muted)}
-    .tx{display:flex;justify-content:space-between;padding:8px;border-radius:8px;border:1px solid #eef2ff;background:#fbfdff}
-    .hidden{display:none} footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-    @media (max-width:880px){ .cols-2{grid-template-columns:1fr} nav a{display:none} header{gap:8px} .logo{width:44px;height:44px} }
-  </style>
+<meta charset="UTF-8">
+<title>Exportation facile et rapide depuis la Chine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f5f5f5;color:#222;line-height:1.6;overflow-x:hidden}
+
+section{
+  padding:30px 20px;
+  background:#fff;
+  margin-bottom:12px;
+  opacity:0;
+  transform:translateY(40px);
+  transition:.8s ease;
+}
+section.show{opacity:1;transform:translateY(0)}
+
+h1,h2{margin-bottom:15px}
+ul li{margin-bottom:10px}
+
+/* HERO */
+.hero{
+  background:linear-gradient(to right,#c40000,#ff7a00);
+  color:#fff;
+  text-align:center;
+  padding:40px 20px;
+}
+.hero img{
+  max-width:100%;
+  border-radius:10px;
+  margin-bottom:20px;
+  animation:zoom 6s infinite alternate;
+}
+@keyframes zoom{from{transform:scale(1)}to{transform:scale(1.05)}}
+
+.price{margin:15px 0}
+.old{text-decoration:line-through;opacity:.7}
+.new{font-size:26px;font-weight:bold;margin-left:10px}
+
+/* URGENCE */
+.urgence{
+  background:#000;
+  color:#fff;
+  padding:12px;
+  border-radius:6px;
+  margin-top:15px;
+  font-weight:bold;
+  animation:blink 1.2s infinite;
+}
+@keyframes blink{50%{opacity:.6}}
+
+/* BUTTON */
+.btn{
+  display:inline-block;
+  background:#000;
+  color:#fff;
+  padding:14px 28px;
+  text-decoration:none;
+  border-radius:6px;
+  margin-top:15px;
+  font-weight:bold;
+  animation:pulse 1.8s infinite;
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(0,0,0,.6)}
+  70%{box-shadow:0 0 0 15px rgba(0,0,0,0)}
+  100%{box-shadow:0 0 0 0 rgba(0,0,0,0)}
+}
+.btn.big{font-size:18px}
+
+/* SECTIONS */
+.problem h2{color:#c40000}
+.solution h2{color:#008000}
+.content h2{color:#004aad}
+.cta{background:#000;color:#fff;text-align:center}
+
+/* PREUVES VISUELLES */
+.slider{
+  max-width:600px;
+  margin:20px auto;
+  position:relative;
+  overflow:hidden;
+  border-radius:10px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+.slide{width:100%;display:none;animation:fadeSlide 1s}
+.slide.active{display:block}
+@keyframes fadeSlide{
+  from{opacity:0;transform:scale(.95)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* COMMENTAIRES */
+.comments{background:#f0f0f0}
+.comment-box{
+  max-width:500px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  text-align:center;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+/* COMMANDES LIVE */
+.live-order{
+  position:fixed;
+  bottom:20px;
+  left:20px;
+  background:#000;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:6px;
+  font-size:14px;
+  display:none;
+  z-index:999;
+  animation:slideIn .5s;
+}
+@keyframes slideIn{
+  from{transform:translateX(-100%)}
+  to{transform:translateX(0)}
+}
+
+footer{
+  text-align:center;
+  padding:15px;
+  font-size:14px;
+  background:#111;
+  color:#ccc;
+}
+
+@media(max-width:600px){
+  h1{font-size:24px}
+  h2{font-size:20px}
+}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="card" id="app">
-      <header>
-        <div class="brand">
-          <div class="logo">BW</div>
-          <div>
-            <div style="font-weight:800">BRAINY WALLET (BW)</div>
-            <div class="small">Portefeuille communautaire — dépôts manuels</div>
-          </div>
-        </div>
-        <nav id="nav">
-          <a href="#" data-route="home">Accueil</a>
-          <a href="#" data-route="register" class="button">S'inscrire</a>
-          <a href="#" data-route="login" class="button" style="background:#0ea5e9">Se connecter</a>
-        </nav>
-      </header>
 
-      <main id="main" class="grid" style="margin-top:18px">
-        <!-- HOME -->
-        <section id="view-home">
-          <div class="cols-2 grid">
-            <div>
-              <h1>Bienvenue sur <span style="color:var(--blue)">BRAINY WALLET</span></h1>
-              <p class="lead">Votre portefeuille numérique communautaire géré par Brainy Agency. Demandez un dépôt — l'administration traitera manuellement vos demandes.</p>
-              <ul class="small">
-                <li>✔ Inscription et connexion</li>
-                <li>✔ Demande de dépôt / retrait</li>
-                <li>✔ Administration manuelle des soldes</li>
-                <li>✔ Émission de cartes virtuelles (par l'admin)</li>
-              </ul>
-              <div style="margin-top:14px">
-                <a href="#" data-route="register" class="button">Créer un compte</a>
-                <a href="#" data-route="login" class="button ghost" style="margin-left:8px">Se connecter</a>
-              </div>
-            </div>
-            <aside class="card" style="padding:12px">
-              <div class="small" style="margin-top:10px">Place ton logo ici</div>
-            </aside>
-          </div>
-        </section>
+<header class="hero">
+  <img src="source/hero.jpg" alt="Importation Chine">
+  <h1>Exportation facile et rapide depuis la Chine</h1>
+  <p>Importe sans arnaque avec des contacts fiables</p>
 
-        <!-- REGISTER -->
-        <section id="view-register" class="hidden">
-          <h2>Créer un compte</h2>
-          <p class="muted">Remplis les informations pour créer ton compte.</p>
-          <div style="margin-top:12px;max-width:520px">
-            <label>Nom complet</label><input id="reg-name" type="text" />
-            <label style="margin-top:8px">Téléphone (WhatsApp)</label><input id="reg-phone" type="text" />
-            <label style="margin-top:8px">Email</label><input id="reg-email" type="email" />
-            <label style="margin-top:8px">Mot de passe</label><input id="reg-pass" type="password" />
-            <div style="margin-top:12px">
-              <button id="reg-submit">S'inscrire</button>
-              <button id="reg-cancel" class="ghost" style="margin-left:8px">Annuler</button>
-            </div>
-            <div id="reg-msg" class="small" style="margin-top:8px;color:crimson"></div>
-          </div>
-        </section>
-
-        <!-- LOGIN -->
-        <section id="view-login" class="hidden">
-          <h2>Se connecter</h2>
-          <p class="muted">Connecte-toi pour accéder à ton tableau de bord.</p>
-          <div style="margin-top:12px;max-width:420px">
-            <label>Email ou téléphone</label><input id="login-user" type="text" />
-            <label style="margin-top:8px">Mot de passe</label><input id="login-pass" type="password" />
-            <div style="margin-top:12px">
-              <button id="login-submit">Se connecter</button>
-              <button id="login-cancel" class="ghost" style="margin-left:8px">Annuler</button>
-            </div>
-            <div id="login-msg" class="small" style="margin-top:8px;color:crimson"></div>
-          </div>
-        </section>
-
-        <!-- DASHBOARD -->
-        <section id="view-dashboard" class="hidden">
-          <div class="cols-2 grid">
-            <div>
-              <div style="display:flex;justify-content:space-between;align-items:center">
-                <div>
-                  <div class="small">Bonjour</div>
-                  <div style="font-weight:700" id="dash-name">Nom</div>
-                  <div class="small" id="dash-phone">+228 ...</div>
-                </div>
-                <div style="text-align:right">
-                  <div class="small">Solde disponible</div>
-                  <div style="font-size:22px;font-weight:800;color:var(--blue)" id="dash-balance">0 F</div>
-                  <div style="margin-top:8px">
-                    <button id="logout-btn" class="ghost">Se déconnecter</button>
-                  </div>
-                </div>
-              </div>
-              <div style="margin-top:14px" class="card">
-                <h3>Faire une demande</h3>
-                <div style="margin-top:8px;max-width:320px">
-                  <label>Montant (F)</label>
-                  <input id="req-amount" type="number" min="1" />
-                  <div style="margin-top:8px">
-                    <button id="req-deposit">Demander dépôt</button>
-                    <button id="req-withdraw" class="ghost" style="margin-left:8px;background:#ef4444;color:white;border:0">Demander retrait</button>
-                  </div>
-                  <div id="req-msg" class="small" style="margin-top:8px;color:crimson"></div>
-                </div>
-              </div>
-              <div style="margin-top:12px" class="card">
-                <h3>Demandes récentes</h3>
-                <div id="requests-list" style="margin-top:8px" class="grid"></div>
-              </div>
-            </div>
-            <aside>
-              <div class="card">
-                <h4>Informations</h4>
-                <div class="small" style="margin-top:8px">Pour déposer : envoyez la demande. Un administrateur vous contactera et créditera manuellement votre compte.</div>
-                <hr style="margin:10px 0" />
-                <div>
-                  <h5 style="margin:6px 0">Carte virtuelle</h5>
-                  <div id="card-info" class="small">Aucune carte émise.</div>
-                </div>
-              </div>
-            </aside>
-          </div>
-        </section>
-      </main>
-
-      <footer class="small" id="footer">© <span id="year"></span> BRAINY WALLET — Brainy Agency</footer>
-    </div>
+  <div class="price">
+    <span class="old">15 000 F</span>
+    <span class="new">5 000 F CFA</span>
   </div>
 
+  <div class="urgence">
+    ⏰ Offre valable <span id="timer">24:00:00</span><br>
+    ⚠️ Plus que <span id="places">7</span> places disponibles
+  </div>
+
+  <a href="TON_LIEN_DE_PAIEMENT_ICI" class="btn">COMMANDER MAINTENANT</a>
+</header>
+
+<section class="problem">
+  <h2>❌ Problèmes fréquents</h2>
+  <ul>
+    <li>Faux fournisseurs</li>
+    <li>Produits copiés</li>
+    <li>Colis bloqués</li>
+    <li>Transit lent</li>
+  </ul>
+</section>
+
+<section class="solution">
+  <h2>✅ La solution</h2>
+  <p>Une formation pratique avec des contacts réels et testés.</p>
+</section>
+
+<section class="content">
+  <h2>📦 Ce que tu obtiens</h2>
+  <ul>
+    <li>Formation vidéo pas à pas</li>
+    <li>5 agents fournisseurs fiables</li>
+    <li>Transitaire rapide (groupage)</li>
+    <li>3 fournisseurs iPhone & Samsung</li>
+  </ul>
+</section>
+
+<section>
+  <h2 style="text-align:center;">📸 Preuves réelles de nos activités</h2>
+  <p style="text-align:center;">Commandes effectuées depuis la Chine & formations disponibles</p>
+  <div class="slider">
+    <img src="source/preuve1.jpg" class="slide active">
+    <img src="source/preuve2.jpg" class="slide">
+    <img src="source/preuve3.jpg" class="slide">
+    <img src="source/preuve4.jpg" class="slide">
+  </div>
+</section>
+
+<section class="comments">
+  <h2 style="text-align:center;">💬 Avis des participants</h2>
+  <div class="comment-box" id="commentBox"></div>
+</section>
+
+<section class="cta">
+  <h2>🚀 Passe à l’action maintenant</h2>
+  <p>Offre limitée – fermeture automatique</p>
+  <a href="TON_LIEN_DE_PAIEMENT_ICI" class="btn big">JE COMMANDE</a>
+</section>
+
+<footer>© 2026 – Formation Exportation Chine</footer>
+
+<div class="live-order" id="liveOrder"></div>
+
 <script>
-const API_BASE = "https://script.google.com/macros/s/AKfycbxuChri6dchWNNFNlFIBs8VO4eP57nwyN6bxN4wwTGzYVsy7ZJQDvDHFe1HCYDmd2uK/exec"; // Mets ton Web App ici
-document.getElementById('year').textContent = new Date().getFullYear();
-
-/* Utilitaires pour API et session */
-async function apiCall(path, body){
-  const url = API_BASE + '?path=' + encodeURIComponent(path);
-  const resp = await fetch(url,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify(body||{})
+// Apparition au scroll
+document.querySelectorAll("section").forEach(sec=>{
+  window.addEventListener("scroll",()=>{
+    if(sec.getBoundingClientRect().top < window.innerHeight-100){
+      sec.classList.add("show");
+    }
   });
-  return resp.json();
-}
-function showView(id){['view-home','view-register','view-login','view-dashboard'].forEach(v=>document.getElementById(v).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo(0,0);}
-function saveSession(user){localStorage.setItem('bw_user',JSON.stringify(user));}
-function getSession(){try{return JSON.parse(localStorage.getItem('bw_user'))}catch(e){return null}}
-function clearSession(){localStorage.removeItem('bw_user');}
-
-/* NAV */
-document.querySelectorAll('[data-route]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const r=a.getAttribute('data-route');if(r==='home')showView('view-home');else if(r==='register')showView('view-register');else if(r==='login')showView('view-login');else if(r==='dashboard'){if(!getSession())return showView('view-login');showView('view-dashboard')}})});
-
-/* INIT PAGE */
-(function(){const s=getSession();if(s){fillDashboard(s);showView('view-dashboard')}else showView('view-home');})();
-
-/* REGISTER */
-document.getElementById('reg-submit').addEventListener('click',async()=>{
-  const fullName=document.getElementById('reg-name').value.trim();
-  const phone=document.getElementById('reg-phone').value.trim();
-  const email=document.getElementById('reg-email').value.trim();
-  const password=document.getElementById('reg-pass').value;
-  const msg=document.getElementById('reg-msg');msg.textContent='';
-  if(!fullName||!phone||!email||!password){msg.textContent='Veuillez remplir tous les champs.';return;}
-  try{const r=await apiCall('register',{fullName,phone,email,password});if(r.ok){msg.style.color='green';msg.textContent='Compte créé. Connectez-vous.';setTimeout(()=>{showView('view-login');},900);}else{msg.style.color='crimson';msg.textContent=r.message||'Erreur'}}catch(err){msg.style.color='crimson';msg.textContent=err.message||'Erreur réseau';}
-});
-document.getElementById('reg-cancel').addEventListener('click',()=>showView('view-home'));
-
-/* LOGIN */
-document.getElementById('login-submit').addEventListener('click',async()=>{
-  const u=document.getElementById('login-user').value.trim();
-  const p=document.getElementById('login-pass').value;
-  const msg=document.getElementById('login-msg');msg.textContent='';
-  if(!u||!p){msg.textContent='Remplis les champs.';return;}
-  try{const r=await apiCall('login',{emailOrPhone:u,password:p});if(r.ok&&r.user){saveSession(r.user);fillDashboard(r.user);showView('view-dashboard')}else{msg.textContent=r.message||'Échec de connexion'}}catch(err){msg.textContent=err.message||'Erreur réseau';}
-});
-document.getElementById('login-cancel').addEventListener('click',()=>showView('view-home'));
-
-/* DASHBOARD */
-async function fillDashboard(user){if(!user)user=getSession();if(!user)return;
-  document.getElementById('dash-name').textContent=user.fullName||user.email;
-  document.getElementById('dash-phone').textContent=user.phone||'';
-  document.getElementById('dash-balance').textContent=(Number(user.balance||0)).toLocaleString()+' F';
-  document.getElementById('card-info').textContent=user.cardNumber&&user.cardNumber!=='xxx'?`Carte: ${user.cardNumber} — Solde: ${(Number(user.cardBalance||0)).toLocaleString()} F`:'Aucune carte émise.';
-  try{const res=await apiCall('listRequests',{userId:user.id});const listEl=document.getElementById('requests-list');listEl.innerHTML='';if(res.ok&&res.requests&&res.requests.length){res.requests.forEach(r=>{const el=document.createElement('div');el.className='tx';el.innerHTML=`<div><div style="font-weight:700">${r.type}</div><div class="small">Statut: ${r.status}</div></div><div class="small">${Number(r.amount).toLocaleString()} F</div>`;listEl.appendChild(el);});}else{listEl.innerHTML='<div class="small muted">Aucune demande récente.</div>'}}catch(e){document.getElementById('requests-list').innerHTML='<div class="small">Impossible de charger les demandes.</div>'}
-}
-
-/* REQUESTS */
-document.getElementById('req-deposit').addEventListener('click',async()=>{
-  const amt=Number(document.getElementById('req-amount').value);const msg=document.getElementById('req-msg');msg.textContent='';if(!amt||amt<=0){msg.textContent='Montant invalide';return;}const user=getSession();if(!user){alert('Connectez-vous');showView('view-login');return;}try{const r=await apiCall('createRequest',{userId:user.id,type:'deposit',amount:amt});if(r.ok){msg.style.color='green';msg.textContent='Demande envoyée.';setTimeout(()=>fillDashboard(user),800);}else{msg.style.color='crimson';msg.textContent=r.message||'Erreur'}}catch(e){msg.style.color='crimson';msg.textContent='Erreur réseau';}
-});
-document.getElementById('req-withdraw').addEventListener('click',async()=>{
-  const amt=Number(document.getElementById('req-amount').value);const msg=document.getElementById('req-msg');msg.textContent='';if(!amt||amt<=0){msg.textContent='Montant invalide';return;}const user=getSession();if(!user){alert('Connectez-vous');showView('view-login');return;}if(Number(user.balance||0)<amt){msg.textContent='Solde insuffisant';return;}try{const r=await apiCall('createRequest',{userId:user.id,type:'withdraw',amount:amt});if(r.ok){msg.style.color='green';msg.textContent='Demande de retrait envoyée.';setTimeout(()=>fillDashboard(user),800);}else{msg.style.color='crimson';msg.textContent=r.message||'Erreur'}}catch(e){msg.style.color='crimson';msg.textContent='Erreur réseau';}
 });
 
-/* LOGOUT */
-document.getElementById('logout-btn').addEventListener('click',()=>{clearSession();showView('view-home');});
+// Commentaires
+const comments=[
+  "⭐⭐⭐⭐⭐ Formation très claire",
+  "⭐⭐⭐⭐⭐ J’ai évité une grosse arnaque",
+  "⭐⭐⭐⭐⭐ Première importation réussie",
+  "⭐⭐⭐⭐⭐ Contacts sérieux"
+];
+let c=0;
+const box=document.getElementById("commentBox");
+setInterval(()=>{
+  box.textContent=comments[c];
+  c=(c+1)%comments.length;
+},4000);
+
+// Commandes live
+const orders=[
+  "Jean – Lomé vient de commander",
+  "Kossi – Kara a rejoint la formation",
+  "Awa – Cotonou vient de payer",
+  "Eric – Accra a commandé"
+];
+let o=0;
+const live=document.getElementById("liveOrder");
+setInterval(()=>{
+  live.textContent=orders[o];
+  live.style.display="block";
+  setTimeout(()=>live.style.display="none",4000);
+  o=(o+1)%orders.length;
+},6000);
+
+// TIMER 24H
+let time=24*60*60;
+const timerEl=document.getElementById("timer");
+setInterval(()=>{
+  let h=Math.floor(time/3600),
+      m=Math.floor((time%3600)/60),
+      s=time%60;
+  timerEl.textContent=
+    String(h).padStart(2,'0')+":"+
+    String(m).padStart(2,'0')+":"+
+    String(s).padStart(2,'0');
+  if(time>0) time--;
+},1000);
+
+// PLACES LIMITÉES
+let places=7;
+const placeEl=document.getElementById("places");
+setInterval(()=>{
+  if(places>1){
+    places--;
+    placeEl.textContent=places;
+  }
+},25000);
+
+// SLIDER PREUVES
+const slides=document.querySelectorAll(".slide");
+let s=0;
+setInterval(()=>{
+  slides[s].classList.remove("active");
+  s=(s+1)%slides.length;
+  slides[s].classList.add("active");
+},3500);
 </script>
+
 </body>
 </html>
