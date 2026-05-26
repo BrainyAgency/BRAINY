@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>BW - Connexion</title>
 <style>
-/* Variables pour le thème professionnel et Glassmorphism */
 :root {
     --primary-color: #007bff;
     --primary-hover: #0056b3;
@@ -28,7 +27,6 @@ body {
     color: var(--text-light);
 }
 
-/* Conteneur Glassmorphism Responsive */
 .container { 
     width: 90%; 
     max-width: 450px; 
@@ -37,16 +35,13 @@ body {
     border-radius: 20px; 
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); 
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px); /* Support Safari */
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     box-sizing: border-box;
     transition: all 0.3s ease;
 }
 
-#register-section {
-    max-width: 550px; /* Légèrement plus large pour le formulaire d'inscription */
-}
-
+#register-section { max-width: 550px; }
 .hidden { display: none !important; }
 
 h2 { 
@@ -59,24 +54,12 @@ h2 {
     letter-spacing: 1px;
 }
 
-/* Gestion responsive des inputs côte à côte */
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-}
-
+.input-group { display: flex; flex-direction: column; gap: 0; }
 @media (min-width: 480px) {
-    .input-group {
-        flex-direction: row;
-        gap: 12px;
-    }
-    .input-group > input {
-        flex: 1;
-    }
+    .input-group { flex-direction: row; gap: 12px; }
+    .input-group > input { flex: 1; }
 }
 
-/* Inputs optimisés pour mobile (taille 16px empêche le zoom iOS) */
 input { 
     width: 100%; 
     padding: 15px; 
@@ -98,7 +81,6 @@ input:focus {
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
 }
 
-/* Boutons tactiles avec zones de clic larges */
 button { 
     width: 100%; 
     padding: 16px; 
@@ -123,7 +105,6 @@ button:active { transform: scale(0.98); }
 .bottom-text a { color: #66b0ff; text-decoration: none; font-weight: bold; transition: color 0.3s; }
 .bottom-text a:hover { color: white; text-decoration: underline; }
 
-/* Popups Glassmorphism */
 .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease; }
 .popup-overlay.show { opacity: 1; visibility: visible; }
 .popup-content { background: rgba(20, 30, 40, 0.95); border: 1px solid var(--glass-border); padding: 30px; border-radius: 16px; text-align: center; max-width: 320px; width: 85%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateY(-20px); transition: transform 0.3s ease; color: var(--text-light); }
@@ -132,6 +113,17 @@ button:active { transform: scale(0.98); }
 #popupMessage { color: var(--text-muted); line-height: 1.5; margin-bottom: 25px; }
 .popup-btn { background: var(--primary-color); color: white; border: none; padding: 14px 20px; border-radius: 10px; cursor: pointer; margin-top: 10px; width: 100%; font-size: 16px; font-weight: bold; }
 </style>
+
+<script>
+window.login = function() {
+    const msg = document.getElementById("login-message");
+    if(msg) msg.textContent = "Initialisation... Patientez une seconde.";
+};
+window.register = function() {
+    const msg = document.getElementById("register-message");
+    if(msg) msg.textContent = "Initialisation... Patientez une seconde.";
+};
+</script>
 </head>
 <body>
 
@@ -188,12 +180,19 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Sécurisation du listener d'état pour intercepter d'éventuelles pannes de réseau mobile
 onAuthStateChanged(auth, async (user) => {
     if (user) {
-        const snap = await getDoc(doc(db, "users", user.uid));
-        if(snap.exists()) {
-            if (snap.data().isAdmin) window.location.href = "admin.html";
-            else window.location.href = "index.html";
+        try {
+            const snap = await getDoc(doc(db, "users", user.uid));
+            if(snap.exists()) {
+                if (snap.data().isAdmin) window.location.href = "admin.html";
+                else window.location.href = "index.html";
+            } else {
+                showPopup("Erreur de compte", "Données utilisateur introuvables en base de données.", true);
+            }
+        } catch(err) {
+            showPopup("Erreur Réseau", "Impossible de charger votre profil. Vérifiez votre connexion.", true);
         }
     }
 });
@@ -202,7 +201,7 @@ window.showPopup = (title, message, isError = false) => {
     const popup = document.getElementById("customPopup");
     const titleEl = document.getElementById("popupTitle");
     titleEl.textContent = title;
-    titleEl.style.color = isError ? "#ff4d4d" : "#00e676"; /* Ajusté pour fond sombre */
+    titleEl.style.color = isError ? "#ff4d4d" : "#00e676"; 
     document.getElementById("popupMessage").textContent = message;
     popup.classList.add("show");
 };
@@ -284,7 +283,15 @@ window.login = async () => {
     const password = document.getElementById("login-password").value;
 
     const now = new Date().getTime();
-    let lockoutUntil = localStorage.getItem('bw_lockout_until');
+    let lockoutUntil = null;
+    
+    // PROTECTION EXCLUSIVE MOBILE : try...catch pour empêcher le crash si le mode privé bloque le stockage
+    try {
+        lockoutUntil = localStorage.getItem('bw_lockout_until');
+    } catch(storageError) {
+        console.warn("Stockage local restreint par le navigateur.");
+    }
+
     if (lockoutUntil && now < parseInt(lockoutUntil)) {
         let remainingMins = Math.ceil((parseInt(lockoutUntil) - now) / 60000);
         return showPopup("Accès bloqué", `Trop de tentatives échouées. Veuillez réessayer dans ${remainingMins} minute(s).`, true);
@@ -294,20 +301,29 @@ window.login = async () => {
     try {
         if (!email || !password) throw {code: "auth/missing-email"};
         await signInWithEmailAndPassword(auth, email, password);
-        localStorage.removeItem('bw_failed_attempts');
-        localStorage.removeItem('bw_lockout_until');
+        
+        try {
+            localStorage.removeItem('bw_failed_attempts');
+            localStorage.removeItem('bw_lockout_until');
+        } catch(e) {}
+        
         msg.textContent = "";
-        // Redirection gérée par onAuthStateChanged en haut
     } catch(e) { 
         msg.textContent = "";
         if (e.code === 'auth/wrong-password' || e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential') {
-            let attempts = parseInt(localStorage.getItem('bw_failed_attempts') || '0') + 1;
-            localStorage.setItem('bw_failed_attempts', attempts);
-            if (attempts >= 5) {
-                localStorage.setItem('bw_lockout_until', now + (5 * 60 * 1000)); 
-                showPopup("Accès bloqué", "5 tentatives échouées. Bloqué pour 5 minutes.", true);
-            } else {
-                showPopup("Erreur", `Identifiants incorrects. Tentatives restantes : ${5 - attempts}`, true);
+            let attempts = 0;
+            try {
+                attempts = parseInt(localStorage.getItem('bw_failed_attempts') || '0') + 1;
+                localStorage.setItem('bw_failed_attempts', attempts);
+                if (attempts >= 5) {
+                    localStorage.setItem('bw_lockout_until', now + (5 * 60 * 1000)); 
+                    showPopup("Accès bloqué", "5 tentatives échouées. Bloqué pour 5 minutes.", true);
+                } else {
+                    showPopup("Erreur", `Identifiants incorrects. Tentatives restantes : ${5 - attempts}`, true);
+                }
+            } catch(storageErr) {
+                // Alternative sécurisée si le localStorage mobile refuse d'écrire
+                showPopup("Erreur", "Identifiants incorrects. Vérifiez vos informations.", true);
             }
         } else {
             showPopup("Erreur de connexion", translateFirebaseError(e), true); 
