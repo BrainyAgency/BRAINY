@@ -82,7 +82,7 @@ header {
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: white;
   text-align: center;
-  padding: 40px 20px;
+  padding: 15px 20px;
   position: relative; /* Ajouté pour positionner le logo */
 }
 
@@ -151,6 +151,136 @@ header {
   cursor: pointer;
 }
 
+/* NOUVEAU STYLE : BOUTON AJOUTER AU PANIER */
+.btn-add-cart {
+  width: 100%;
+  padding: 12px;
+  background: #f39c12; /* Couleur distincte (orange) pour le panier */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-bottom: 10px; /* Espace entre les deux boutons */
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.btn-add-cart:hover {
+  background: #d68910;
+}
+
+/* NOUVEAUX STYLES POUR LE PANIER */
+#cart-floating-btn {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #e63946;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  cursor: pointer;
+  z-index: 1001;
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.2s, background 0.3s;
+}
+
+#cart-floating-btn:hover {
+  background: #d62828;
+}
+
+#cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1002;
+  display: none;
+}
+
+#cart-overlay.active {
+  display: block;
+}
+
+#cart-modal {
+  position: fixed;
+  top: 0;
+  right: -450px;
+  width: 100%;
+  max-width: 400px;
+  height: 100%;
+  background: white;
+  box-shadow: -2px 0 15px rgba(0,0,0,0.2);
+  z-index: 1003;
+  transition: right 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+#cart-modal.active {
+  right: 0;
+}
+
+.cart-header {
+  padding: 20px;
+  background: #2c5364;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-header h2 { margin: 0; font-size: 1.5rem; }
+.close-cart { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-item-info h4 { margin: 0 0 5px 0; color: #333; font-size: 1rem; }
+.cart-item-info p { margin: 0; color: #666; font-size: 0.9rem; }
+
+.cart-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-qty { background: #eee; border: 1px solid #ccc; width: 28px; height: 28px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+.btn-qty:hover { background: #ddd; }
+.btn-remove { background: #e63946; color: white; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; }
+
+.cart-footer {
+  padding: 20px;
+  background: #f4f6f9;
+  border-top: 1px solid #ddd;
+}
+
+.cart-total { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; margin-bottom: 15px; color: #2c5364; }
+
+.btn-cart-action { width: 100%; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; margin-bottom: 10px; font-size: 1rem; }
+.btn-checkout { background: #2ecc71; color: white; }
+.btn-checkout:hover { background: #27ae60; }
+.btn-clear { background: #e63946; color: white; }
+.btn-clear:hover { background: #c0392b; }
+
 footer {
   background: #0f2027;
   color: white;
@@ -188,9 +318,8 @@ footer {
         <h3>Kpedjigawou</h3>
         <p>Spécialité locale savoureuse préparée avec soin et épices traditionnelles.</p>
         <div class="price">1 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Kpedjigawou', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Kpedjigawou', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Kpedjigawou', 1500)">Commander</button>
     </div>
 </div>
 
@@ -201,9 +330,8 @@ footer {
         <h3>Spaghettis</h3>
         <p>Plat généreux de pâtes sautées aux petits légumes et épices parfumées.</p>
         <div class="price">2 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Spaghettis', 2000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Spaghettis', 2000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Spaghettis', 2000)">Commander</button>
     </div>
 </div>
 
@@ -214,9 +342,8 @@ footer {
         <h3>Riz cantonais poulet</h3>
         <p>Riz sauté façon cantonaise avec de tendres morceaux de poulet et légumes croquants.</p>
         <div class="price">3 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Riz cantonais poulet', 3000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Riz cantonais poulet', 3000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Riz cantonais poulet', 3000)">Commander</button>
     </div>
 </div>
 
@@ -227,9 +354,8 @@ footer {
         <h3>Akpan brochette</h3>
         <p>Douceur traditionnelle rafraîchissante accompagnée de succulentes brochettes de viande.</p>
         <div class="price">3 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Akpan brochette', 3500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Akpan brochette', 3500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Akpan brochette', 3500)">Commander</button>
     </div>
 </div>
 
@@ -240,9 +366,8 @@ footer {
         <h3>Koliko brochette</h3>
         <p>Frites d'igname dorées et croustillantes servies avec des brochettes savoureuses.</p>
         <div class="price">3 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Koliko brochette', 3500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Koliko brochette', 3500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Koliko brochette', 3500)">Commander</button>
     </div>
 </div>
 
@@ -253,9 +378,8 @@ footer {
         <h3>Djenkoumé poulet</h3>
         <p>Pâte de maïs torréfié savoureuse accompagnée de morceaux de poulet bien assaisonnés.</p>
         <div class="price">3 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Djenkoumé poulet', 3500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Djenkoumé poulet', 3500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Djenkoumé poulet', 3500)">Commander</button>
     </div>
 </div>
 
@@ -266,9 +390,8 @@ footer {
         <h3>Djenkoumé poulet bicyclette</h3>
         <p>Djenkoumé authentique servi avec la chair ferme et goûteuse d'un poulet bicyclette local.</p>
         <div class="price">7 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Djenkoumé poulet bicyclette', 7000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Djenkoumé poulet bicyclette', 7000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Djenkoumé poulet bicyclette', 7000)">Commander</button>
     </div>
 </div>
 
@@ -279,9 +402,8 @@ footer {
         <h3>Ragoût d'igname / patates douces</h3>
         <p>Ragoût longuement mijoté aux saveurs authentiques, garni de tubercules fondants au choix.</p>
         <div class="price">4 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Ragoût d\'igname / patates douces', 4000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Ragoût d\'igname / patates douces', 4000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Ragoût d\'igname / patates douces', 4000)">Commander</button>
     </div>
 </div>
 
@@ -292,9 +414,8 @@ footer {
         <h3>Poulet mayo</h3>
         <p>Morceaux de poulet tendres et frits, enrobés d'une sauce mayonnaise onctueuse et gourmande.</p>
         <div class="price">4 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Poulet mayo', 4500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Poulet mayo', 4500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Poulet mayo', 4500)">Commander</button>
     </div>
 </div>
 
@@ -305,9 +426,8 @@ footer {
         <h3>Akoumé Ebessesi</h3>
         <p>Pâte traditionnelle de maïs accompagnée d'une sauce locale épicée et savoureuse.</p>
         <div class="price">6 000 FCFA / 7 000 FCFA / 8 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Akoumé Ebessesi', 6000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Akoumé Ebessesi', 6000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Akoumé Ebessesi', 6000)">Commander</button>
     </div>
 </div>
 
@@ -318,9 +438,8 @@ footer {
         <h3>Akoumé Adèmè</h3>
         <p>L'incontournable pâte locale servie avec la célèbre sauce gluante Adèmè riche en goût.</p>
         <div class="price">7 000 FCFA à 8 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Akoumé Adèmè', 7000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Akoumé Adèmè', 7000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Akoumé Adèmè', 7000)">Commander</button>
     </div>
 </div>
 
@@ -331,9 +450,8 @@ footer {
         <h3>Fufu poulet</h3>
         <p>Igname pilée à la texture parfaite, servie avec une soupe légère et du poulet bien assaisonné.</p>
         <div class="price">7 000 FCFA à 8 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Fufu poulet', 7000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Fufu poulet', 7000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Fufu poulet', 7000)">Commander</button>
     </div>
 </div>
 
@@ -344,9 +462,8 @@ footer {
         <h3>Fufu poisson</h3>
         <p>Igname pilée accompagnée d'une délicieuse soupe de poisson mijotée aux épices.</p>
         <div class="price">6 000 FCFA / 7 000 FCFA / 8 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Fufu poisson', 6000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Fufu poisson', 6000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Fufu poisson', 6000)">Commander</button>
     </div>
 </div>
 
@@ -357,9 +474,8 @@ footer {
         <h3>Fufu chèvre</h3>
         <p>Le grand classique : Fufu traditionnel servi avec une soupe corsée à la viande de chèvre.</p>
         <div class="price">8 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Fufu chèvre', 8000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Fufu chèvre', 8000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Fufu chèvre', 8000)">Commander</button>
     </div>
 </div>
 
@@ -370,9 +486,8 @@ footer {
         <h3>Fufu agouti</h3>
         <p>Un mets de choix composé d'igname pilée et d'une sauce riche à la viande d'agouti.</p>
         <div class="price">15 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Fufu agouti', 15000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Fufu agouti', 15000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Fufu agouti', 15000)">Commander</button>
     </div>
 </div>
 
@@ -383,9 +498,8 @@ footer {
         <h3>Sifio (Tilapia)</h3>
         <p>Poisson Tilapia préparé avec expertise selon le savoir-faire local, tendre et parfumé.</p>
         <div class="price">6 000 FCFA / 7 000 FCFA / 8 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Sifio (Tilapia)', 6000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Sifio (Tilapia)', 6000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Sifio (Tilapia)', 6000)">Commander</button>
     </div>
 </div>
 
@@ -396,9 +510,8 @@ footer {
         <h3>Poisson braisé</h3>
         <p>Poisson frais mariné aux épices fines puis braisé au feu de bois pour un goût fumé unique.</p>
         <div class="price">7 000 FCFA à 8 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Poisson braisé', 7000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Poisson braisé', 7000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Poisson braisé', 7000)">Commander</button>
     </div>
 </div>
 
@@ -409,9 +522,8 @@ footer {
         <h3>Familiale Zozo</h3>
         <p>Grand plateau convivial avec Koliko, alloco, poulet mayo et poisson braisé à partager.</p>
         <div class="price">15 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Familiale Zozo', 15000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Familiale Zozo', 15000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Familiale Zozo', 15000)">Commander</button>
     </div>
 </div>
 
@@ -422,9 +534,8 @@ footer {
         <h3>Familiale Zio Lodge</h3>
         <p>Le festin royal réunissant Koliko, riz, alloco, brochettes, poulet et poisson braisé.</p>
         <div class="price">20 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Familiale Zio Lodge', 20000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Familiale Zio Lodge', 20000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Familiale Zio Lodge', 20000)">Commander</button>
     </div>
 </div>
 
@@ -435,9 +546,8 @@ footer {
         <h3>Brochette</h3>
         <p>Morceaux de viande tendres, finement marinés et grillés à la perfection.</p>
         <div class="price">1 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Brochette', 1000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Brochette', 1000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Brochette', 1000)">Commander</button>
     </div>
 </div>
 
@@ -448,9 +558,8 @@ footer {
         <h3>Alloco</h3>
         <p>Délicieuses rondelles de bananes plantains mûres frites jusqu'à obtenir une couleur dorée.</p>
         <div class="price">Supplément : 1 500 FCFA à 2 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Alloco', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Alloco', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Alloco', 1500)">Commander</button>
     </div>
 </div>
 
@@ -461,9 +570,8 @@ footer {
         <h3>Attiéké</h3>
         <p>Semoule de manioc cuite à la vapeur, légère, légèrement acidulée et irrésistible.</p>
         <div class="price">Supplément : 1 500 FCFA à 2 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Attiéké', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Attiéké', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Attiéké', 1500)">Commander</button>
     </div>
 </div>
 
@@ -474,9 +582,8 @@ footer {
         <h3>Riz blanc</h3>
         <p>Portion de riz blanc nature, cuit à la perfection pour accompagner harmonieusement vos sauces.</p>
         <div class="price">Supplément : 1 500 FCFA à 2 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Riz blanc', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Riz blanc', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Riz blanc', 1500)">Commander</button>
     </div>
 </div>
 
@@ -487,9 +594,8 @@ footer {
         <h3>Riz gras</h3>
         <p>Riz cuisiné dans un savoureux bouillon de tomates, d'épices et d'aromates locaux.</p>
         <div class="price">Supplément : 1 500 FCFA à 2 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Riz gras', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Riz gras', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Riz gras', 1500)">Commander</button>
     </div>
 </div>
 
@@ -500,9 +606,8 @@ footer {
         <h3>Patates douces</h3>
         <p>Portion de patates douces frites offrant une texture croustillante et une douce note sucrée.</p>
         <div class="price">Supplément : 1 500 FCFA à 2 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Patates douces', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Patates douces', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Patates douces', 1500)">Commander</button>
     </div>
 </div>
 
@@ -516,9 +621,8 @@ footer {
         <h3>Toutes les boissons BB & SNB</h3>
         <p>Retrouvez la gamme complète de vos rafraîchissements classiques des brasseries locales.</p>
         <div class="price">1 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Boissons BB & SNB', 1000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Boissons BB & SNB', 1000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Boissons BB & SNB', 1000)">Commander</button>
     </div>
 </div>
 
@@ -529,9 +633,8 @@ footer {
         <h3>AWOYOO</h3>
         <p>Boisson brune rafraîchissante et pleine de caractère, idéale pour étancher votre soif.</p>
         <div class="price">1 500 FCFA</div>
-        <button class="btn-order" onclick="commander('AWOYOO', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('AWOYOO', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('AWOYOO', 1500)">Commander</button>
     </div>
 </div>
 
@@ -542,9 +645,8 @@ footer {
         <h3>PILS</h3>
         <p>Bière blonde de renommée, légère, finement pétillante et très désaltérante.</p>
         <div class="price">1 500 FCFA</div>
-        <button class="btn-order" onclick="commander('PILS', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('PILS', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('PILS', 1500)">Commander</button>
     </div>
 </div>
 
@@ -555,9 +657,8 @@ footer {
         <h3>LAGER</h3>
         <p>Bière douce et rafraîchissante, parfaite pour accompagner vos repas en toute simplicité.</p>
         <div class="price">1 500 FCFA</div>
-        <button class="btn-order" onclick="commander('LAGER', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('LAGER', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('LAGER', 1500)">Commander</button>
     </div>
 </div>
 
@@ -568,9 +669,8 @@ footer {
         <h3>Eau minérale</h3>
         <p>Eau pure et naturelle en bouteille pour vous hydrater sereinement à tout moment.</p>
         <div class="price">1 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Eau minérale', 1000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Eau minérale', 1000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Eau minérale', 1000)">Commander</button>
     </div>
 </div>
 
@@ -581,9 +681,8 @@ footer {
         <h3>Energy Drinks</h3>
         <p>Un assortiment de boissons énergisantes pour vous redonner un coup de boost immédiat.</p>
         <div class="price">1 000 à 1 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Energy Drinks', 1000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Energy Drinks', 1000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Energy Drinks', 1000)">Commander</button>
     </div>
 </div>
 
@@ -594,9 +693,8 @@ footer {
         <h3>FAB (Forever Énergie Drink)</h3>
         <p>Boisson énergétique premium de Forever offrant une vitalité durable et saine.</p>
         <div class="price">5 000 FCFA</div>
-        <button class="btn-order" onclick="commander('FAB (Forever Énergie Drink)', 5000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('FAB (Forever Énergie Drink)', 5000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('FAB (Forever Énergie Drink)', 5000)">Commander</button>
     </div>
 </div>
 
@@ -607,9 +705,8 @@ footer {
         <h3>Tchoukoutchou</h3>
         <p>Délicieuse bière traditionnelle locale, artisanale et brassée à base de sorgho.</p>
         <div class="price">1 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Tchoukoutchou', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Tchoukoutchou', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Tchoukoutchou', 1500)">Commander</button>
     </div>
 </div>
 
@@ -620,9 +717,8 @@ footer {
         <h3>Vin de palme (Deha)</h3>
         <p>Boisson 100% naturelle directement extraite du palmier, fraîche, douce et légèrement pétillante.</p>
         <div class="price">1 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Vin de palme (Deha)', 1500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Vin de palme (Deha)', 1500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Vin de palme (Deha)', 1500)">Commander</button>
     </div>
 </div>
 
@@ -633,9 +729,8 @@ footer {
         <h3>Zio Lodge Apevia Bio</h3>
         <p>Boisson naturelle et biologique, une spécialité exclusive de la maison aux vertus purifiantes.</p>
         <div class="price">2 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Zio Lodge Apevia Bio', 2500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Zio Lodge Apevia Bio', 2500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Zio Lodge Apevia Bio', 2500)">Commander</button>
     </div>
 </div>
 
@@ -646,9 +741,8 @@ footer {
         <h3>Zio Lodge Apevia Atkedji</h3>
         <p>Boisson tonifiante et traditionnelle revisitée par l'expertise et le soin de Zio Lodge.</p>
         <div class="price">3 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Zio Lodge Apevia Atkedji', 3000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Zio Lodge Apevia Atkedji', 3000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Zio Lodge Apevia Atkedji', 3000)">Commander</button>
     </div>
 </div>
 
@@ -659,9 +753,8 @@ footer {
         <h3>Cocktail Zio Lodge</h3>
         <p>Mélange exotique rafraîchissant créé par notre barman pour éveiller vos papilles.</p>
         <div class="price">3 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Cocktail Zio Lodge', 3000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Cocktail Zio Lodge', 3000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Cocktail Zio Lodge', 3000)">Commander</button>
     </div>
 </div>
 
@@ -672,9 +765,8 @@ footer {
         <h3>Jus de fruit naturel</h3>
         <p>Jus fraîchement pressé avec des fruits de saison, gorgé de vitamines et de douceur.</p>
         <div class="price">2 500 FCFA</div>
-        <button class="btn-order" onclick="commander('Jus de fruit naturel', 2500)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Jus de fruit naturel', 2500)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Jus de fruit naturel', 2500)">Commander</button>
     </div>
 </div>
 
@@ -685,9 +777,8 @@ footer {
         <h3>Vin Zio Lodge</h3>
         <p>Cuvée spéciale de la maison aux arômes intenses, idéale pour accompagner vos grandes occasions.</p>
         <div class="price">6 000 FCFA</div>
-        <button class="btn-order" onclick="commander('Vin Zio Lodge', 6000)">
-            Commander
-        </button>
+        <button class="btn-add-cart" onclick="ajouterAuPanier('Vin Zio Lodge', 6000)">Ajouter au panier</button>
+        <button class="btn-order" onclick="commander('Vin Zio Lodge', 6000)">Commander</button>
     </div>
 </div>
 
@@ -700,30 +791,53 @@ footer {
     <h3>Frites</h3>
     <p>Frites croustillantes et bien assaisonnées.</p>
     <div class="price">1 500 FCFA</div>
+    <button class="btn-add-cart" onclick="ajouterAuPanier('Frites', 1500)">Ajouter au panier</button>
     <button class="btn-order" onclick="commander('Frites',1500)">Commander</button>
   </div>
 </div>
 
 </section>
 
+<div id="cart-floating-btn" onclick="toggleCart()">
+  🛒 Panier (<span id="cart-count">0</span>)
+</div>
+
+<div id="cart-overlay" onclick="toggleCart()"></div>
+<div id="cart-modal">
+  <div class="cart-header">
+    <h2>Votre Panier</h2>
+    <button class="close-cart" onclick="toggleCart()">✖</button>
+  </div>
+  
+  <div class="cart-items" id="cart-items">
+    </div>
+  
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>Total :</span>
+      <span><span id="cart-total">0</span> FCFA</span>
+    </div>
+    <button class="btn-cart-action btn-checkout" onclick="commanderPanier()">Commander le panier</button>
+    <button class="btn-cart-action btn-clear" onclick="viderPanier()">Vider le panier</button>
+  </div>
+</div>
+
 <footer>
 © 2025 ZIO LODGE — Tous droits réservés
 </footer>
 
 <script>
-// Fonction de filtrage
+// Fonction de filtrage existante
 function filterMenu(category, btn) {
-  // Gérer l'état actif des boutons
   let buttons = document.querySelectorAll('.btn-filter');
   buttons.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  // Filtrer les éléments de la grille
   let items = document.querySelector('.menu-container').children;
   for (let i = 0; i < items.length; i++) {
     let item = items[i];
     if (category === 'tout') {
-      item.style.display = ""; // Rétablit l'affichage par défaut (grid ou block)
+      item.style.display = ""; 
     } else {
       if (item.classList.contains(category)) {
         item.style.display = "";
@@ -734,7 +848,7 @@ function filterMenu(category, btn) {
   }
 }
 
-// Fonction de commande existante
+// Fonction de commande individuelle existante
 function commander(nomPlat, prix) {
   let qte = prompt("Nombre de plats ?");
   if (!qte || qte <= 0) return;
@@ -757,6 +871,121 @@ function commander(nomPlat, prix) {
     "_blank"
   );
 }
+
+// --- NOUVELLE FONCTIONNALITÉ : GESTION DU PANIER ---
+
+let cart = [];
+
+function ajouterAuPanier(nom, prix) {
+  let existingItem = cart.find(item => item.nom === nom);
+  
+  if (existingItem) {
+    existingItem.qty += 1;
+  } else {
+    cart.push({ nom: nom, prix: prix, qty: 1 });
+  }
+  
+  updateCartUI();
+  
+  // Animation visuelle du bouton panier pour confirmer l'ajout
+  let btn = document.getElementById('cart-floating-btn');
+  btn.style.transform = 'scale(1.15)';
+  setTimeout(() => { btn.style.transform = 'scale(1)'; }, 200);
+}
+
+function updateCartUI() {
+  let cartItemsContainer = document.getElementById('cart-items');
+  let cartTotalEl = document.getElementById('cart-total');
+  let cartCountEl = document.getElementById('cart-count');
+  
+  cartItemsContainer.innerHTML = '';
+  let total = 0;
+  let count = 0;
+
+  if(cart.length === 0) {
+    cartItemsContainer.innerHTML = '<p style="text-align:center; color:#666; margin-top:20px;">Votre panier est vide.</p>';
+  } else {
+    cart.forEach((item, index) => {
+      let subtotal = item.prix * item.qty;
+      total += subtotal;
+      count += item.qty;
+
+      cartItemsContainer.innerHTML += `
+        <div class="cart-item">
+          <div class="cart-item-info">
+            <h4>${item.nom}</h4>
+            <p>${item.prix} FCFA x ${item.qty} = <strong>${subtotal} FCFA</strong></p>
+          </div>
+          <div class="cart-item-actions">
+            <button class="btn-qty" onclick="changeQty(${index}, -1)">-</button>
+            <span>${item.qty}</span>
+            <button class="btn-qty" onclick="changeQty(${index}, 1)">+</button>
+            <button class="btn-remove" onclick="removeItem(${index})">❌</button>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  cartTotalEl.innerText = total;
+  cartCountEl.innerText = count;
+}
+
+function changeQty(index, delta) {
+  cart[index].qty += delta;
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1);
+  }
+  updateCartUI();
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  updateCartUI();
+}
+
+function viderPanier() {
+  if(cart.length === 0) return;
+  if(confirm("Voulez-vous vraiment vider votre panier ?")) {
+    cart = [];
+    updateCartUI();
+  }
+}
+
+function toggleCart() {
+  document.getElementById('cart-modal').classList.toggle('active');
+  document.getElementById('cart-overlay').classList.toggle('active');
+}
+
+function commanderPanier() {
+  if (cart.length === 0) {
+    alert("Votre panier est vide !");
+    return;
+  }
+  
+  let table = prompt("Numéro de table ?");
+  if (!table) return;
+
+  let message = "🛒 COMMANDE ZIO LODGE (Panier)\n\n";
+  let total = 0;
+
+  cart.forEach(item => {
+    let subtotal = item.prix * item.qty;
+    message += "- " + item.qty + "x " + item.nom + " (" + item.prix + " FCFA) = " + subtotal + " FCFA\n";
+    total += subtotal;
+  });
+
+  message += "\n💰 Total à payer : " + total + " FCFA\n";
+  message += "📍 Table : " + table;
+
+  window.open(
+    "https://wa.me/22896368928?text=" + encodeURIComponent(message),
+    "_blank"
+  );
+}
+
+// Initialiser l'affichage du panier au chargement
+updateCartUI();
 </script>
 
 </body>
